@@ -6,18 +6,18 @@
  		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 
-    <bean id="consoleEventLogger" class="com.training.ConsoleEventLogger"/>
-    <bean id="eventLogger" class="com.training.EventLogger" abstract="true"/>
+    <bean id="consoleEventLogger" class="com.training.logger.ConsoleEventLogger"/>
+    <bean id="eventLogger" class="com.training.logger.EventLogger" abstract="true"/>
 
-    <bean id="fileEventLogger" class="com.training.FileEventLogger" init-method="init" >
+    <bean id="fileEventLogger" class="com.training.logger.FileEventLogger" init-method="init" >
         <constructor-arg value="outFile.txt"/>
     </bean>
 
-    <bean id="cacheFileEventLogger" class="com.training.CacheFileEventLogger"  destroy-method="destroy" parent="fileEventLogger">
+    <bean id="cacheFileEventLogger" class="com.training.logger.CacheFileEventLogger" destroy-method="destroy" parent="fileEventLogger">
         <constructor-arg value="4"/>
     </bean>
 
-    <bean id="combinedEventLogger" class="com.training.CombinedEventLogger">
+    <bean id="combinedEventLogger" class="com.training.logger.CombinedEventLogger">
         <constructor-arg>
             <list>
                 <ref bean="fileEventLogger"/>

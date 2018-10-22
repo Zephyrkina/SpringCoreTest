@@ -2,13 +2,19 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation="
  		http://www.springframework.org/schema/beans
  		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+ 		http://www.springframework.org/schema/context
+ 		http://www.springframework.org/schema/context/spring-context-3.2.xsd
  		http://www.springframework.org/schema/util
  		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <context:annotaion-config/>
+    <context:component-scan base-package="com.training"/>
 
     <import resource="loggers.xml"/>
 <!--
@@ -27,8 +33,8 @@
 
 </bean>
 
-    <bean id="client" class="com.training.Client"
-          p:greeting="${greeting}">
+    <bean id="client" class="com.training.bean.Client"
+          p:greeting="#{greeting ?: 'hi'}">
 
         <constructor-arg index="0" value="${id}"/>
         <constructor-arg value="${name}"/>
@@ -44,12 +50,12 @@
 
     <bean id="app" class="com.training.App">
         <constructor-arg ref="client"/>
-        <constructor-arg ref="consoleEventLogger"/>
+        <constructor-arg ref="#{ T(com.training.Event).isDay() ? fileEventLogger : consoleEventLogger}"/>
         <constructor-arg ref="loggerMap"/>
 
     </bean>
 
-    <bean id="event" class="com.training.Event" scope="prototype">
+    <bean id="event" class="com.training.bean.Event" scope="prototype">
         <constructor-arg>
             <bean id="date" class="java.util.Date"/>
         </constructor-arg>

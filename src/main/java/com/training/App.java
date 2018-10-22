@@ -1,18 +1,36 @@
 package com.training;
 
+import com.training.config.AppConfig;
+import com.training.bean.Client;
+import com.training.bean.Event;
+import com.training.bean.EventType;
+import com.training.config.LoggersConfig;
+import com.training.logger.EventLogger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.time.LocalDate;
-import java.util.AbstractMap;
-import java.util.Date;
+import javax.annotation.Resource;
 import java.util.Map;
 
 public class App {
+
+    @Autowired
     private Client client;
+
+    @Resource(name="defaultLogger")
     private EventLogger defaultLogger;
+
+
+    @Resource(name="loggerMap")
     private Map<EventType, EventLogger> loggers;
+
+    public App() {
+    }
+
 
     public App(Client client, EventLogger defaultLogger, Map<EventType, EventLogger> loggers) {
         this.client = client;
@@ -20,7 +38,7 @@ public class App {
         this.loggers = loggers;
     }
 
-    public void logEvent(Event event, EventType type,String msg) {
+    public void logEvent( EventType type, Event event, String msg) {
         String message = msg.replaceAll(client.getId(), client.getFullName());
         event.setMsg(message);
 
@@ -33,18 +51,27 @@ public class App {
     }
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-        App app = (App) context.getBean("app");
-        // (EventType) context.getBean("typeEvent")
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+        ctx.register(AppConfig.class, LoggersConfig.class);
+        ctx.scan("com.training");
+        ctx.refresh();
 
+        App app = (App) ctx.getBean("app");
 
-        app.logEvent((Event) context.getBean("event"), null, "Some event for 1");
-        app.logEvent((Event) context.getBean("event"), EventType.ERROR, "Some event for 2");
-        app.logEvent((Event) context.getBean("event"), EventType.ERROR, "Some event for 3");
-        app.logEvent((Event) context.getBean("event"), EventType.INFO, "Some event for 4");
-        app.logEvent((Event) context.getBean("event"), EventType.ERROR, "Some event for 5");
+        Client client = ctx.getBean(Client.class);
+        System.out.println("Client says: " + client.getGreeting());
 
-        context.close();
+        Event event = ctx.getBean(Event.class);
+        app.logEvent(EventType.INFO, event, "Some event for 1");
+
+        event = ctx.getBean(Event.class);
+        app.logEvent(EventType.ERROR, event, "Some event for 2");
+
+        event = ctx.getBean(Event.class);
+        app.logEvent(null, event, "Some event for 3");
+
+        ctx.close();
+
 
 
     }

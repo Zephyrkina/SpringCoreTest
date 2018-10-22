@@ -1,19 +1,20 @@
-package com.training;
+package com.training.logger;
 
-import org.apache.commons.io.FileUtils;
+import com.training.bean.Event;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CacheFileEventLogger extends FileEventLogger{
+@Component
+public class CacheFileEventLogger extends FileEventLogger {
+    @Value("4")
     private int cacheSize;
+
     private List<Event> cache;
-/*
-    public void init1() {
-        cache = new ArrayList<>();
-    }*/
 
     public CacheFileEventLogger(String fileName, int cacheSize) {
         super(fileName);
@@ -36,6 +37,7 @@ public class CacheFileEventLogger extends FileEventLogger{
         }
     }
 
+    @PreDestroy
     public void destroy() {
         if(! cache.isEmpty()){
             writeEventsFromCache();
