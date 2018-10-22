@@ -15,8 +15,10 @@ public class FileEventLogger implements EventLogger {
     public void init() throws IOException {
         this.file = new File(fileName);
         System.out.println(fileName);
-        if (!file.canWrite()) {
+        if (!file.canWrite() && file.exists()) {
             throw new IOException("file write access denied");
+        }  else if (!file.exists()) {
+            file.createNewFile();
         }
     }
 

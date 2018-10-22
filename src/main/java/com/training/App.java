@@ -5,6 +5,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.Map;
 
@@ -19,7 +20,10 @@ public class App {
         this.loggers = loggers;
     }
 
-    public void logEvent(Event event, EventType type) {
+    public void logEvent(Event event, EventType type,String msg) {
+        String message = msg.replaceAll(client.getId(), client.getFullName());
+        event.setMsg(message);
+
         EventLogger logger = loggers.get(type);
         if(logger == null) {
             logger = defaultLogger;
@@ -33,11 +37,12 @@ public class App {
         App app = (App) context.getBean("app");
         // (EventType) context.getBean("typeEvent")
 
-        app.logEvent((Event) context.getBean("event"), null);
-        app.logEvent((Event) context.getBean("event"), EventType.ERROR);
-        app.logEvent((Event) context.getBean("event"), EventType.ERROR);
-        app.logEvent((Event) context.getBean("event"), EventType.INFO);
-        app.logEvent((Event) context.getBean("event"), EventType.ERROR);
+
+        app.logEvent((Event) context.getBean("event"), null, "Some event for 1");
+        app.logEvent((Event) context.getBean("event"), EventType.ERROR, "Some event for 2");
+        app.logEvent((Event) context.getBean("event"), EventType.ERROR, "Some event for 3");
+        app.logEvent((Event) context.getBean("event"), EventType.INFO, "Some event for 4");
+        app.logEvent((Event) context.getBean("event"), EventType.ERROR, "Some event for 5");
 
         context.close();
 

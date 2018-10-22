@@ -6,7 +6,8 @@ public class CombinedEventLogger implements EventLogger {
     private Collection<EventLogger> loggers;
 
 
-    public CombinedEventLogger(Collection loggers) {
+    public CombinedEventLogger(Collection<EventLogger> loggers) {
+        super();
         this.loggers = loggers;
     }
 
