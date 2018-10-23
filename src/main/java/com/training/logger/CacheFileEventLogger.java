@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,17 @@ public class CacheFileEventLogger extends FileEventLogger {
 
     private List<Event> cache;
 
+    public CacheFileEventLogger() {
+    }
+
     public CacheFileEventLogger(String fileName, int cacheSize) {
         super(fileName);
         this.cacheSize = cacheSize;
-        this.cache = new ArrayList<>(cacheSize);
+    }
+
+    @PostConstruct
+    public void initCache() {
+        this.cache = new ArrayList<Event>(cacheSize);
     }
 
     public void logEvent(Event event) {

@@ -15,25 +15,28 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Configuration
-public class LoggersConfig {
+public class LoggerConfig {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Resource(name = "combinedEventLogger")
-    private EventLogger combinedEventLogger;
+    @Resource(name = "consoleEventLogger")
+    private EventLogger consoleEventLogger;
+
 
     @Resource(name = "fileEventLogger")
     private EventLogger fileEventLogger;
+
+    @Resource(name = "combinedEventLogger")
+    private EventLogger combinedEventLogger;
+
 
     @Resource(name = "cacheFileEventLogger")
     private EventLogger cacheFileEventLogger;
 
 
-    @Resource(name = "consoleEventLogger")
-    private EventLogger consoleEventLogger;
 
 
     @Bean

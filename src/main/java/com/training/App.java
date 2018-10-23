@@ -4,18 +4,16 @@ import com.training.config.AppConfig;
 import com.training.bean.Client;
 import com.training.bean.Event;
 import com.training.bean.EventType;
-import com.training.config.LoggersConfig;
+import com.training.config.LoggerConfig;
 import com.training.logger.EventLogger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Map;
 
+@Service
 public class App {
 
     @Autowired
@@ -52,7 +50,7 @@ public class App {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-        ctx.register(AppConfig.class, LoggersConfig.class);
+        ctx.register(AppConfig.class, LoggerConfig.class);
         ctx.scan("com.training");
         ctx.refresh();
 

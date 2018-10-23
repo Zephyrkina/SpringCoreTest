@@ -16,6 +16,9 @@ public class FileEventLogger implements EventLogger {
     private File file;
 
 
+    public FileEventLogger() {
+    }
+
     public FileEventLogger(String fileName) {
         this.fileName = fileName;
     }
@@ -32,6 +35,7 @@ public class FileEventLogger implements EventLogger {
     }
 
 
+    @Override
     public void logEvent(Event event) {
 
         try {
@@ -39,16 +43,6 @@ public class FileEventLogger implements EventLogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // String str = "";
-       /* try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))){
-            writer.write(event.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
-
-        //writer.close();
-        //new FileOutputStream(fileName).
 
     }
 }

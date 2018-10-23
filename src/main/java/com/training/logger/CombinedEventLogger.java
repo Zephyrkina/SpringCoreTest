@@ -9,10 +9,13 @@ import java.util.Collection;
 
 @Component
 public class CombinedEventLogger implements EventLogger {
+
     @Resource(name="combinedLoggers")
     private Collection<EventLogger> loggers;
 
-/*
+
+
+    /*
     @Autowired
     public CombinedEventLogger(Collection<EventLogger> loggers) {
         super();
@@ -21,7 +24,7 @@ public class CombinedEventLogger implements EventLogger {
 
     @Override
     public void logEvent(Event event) {
-        for(EventLogger eventLogger: loggers){
+        for(EventLogger eventLogger : loggers){
             eventLogger.logEvent(event);
         }
 

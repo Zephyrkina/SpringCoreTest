@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Component
 @Scope("prototype")
@@ -16,15 +17,20 @@ public class Event {
 
     @Autowired
     @Qualifier("newDate")
-    private static  LocalDateTime date;
+    private Date date;
 
     @Autowired
     private DateFormat df;
 
-    public Event(LocalDateTime date, DateFormat df) {
+    public Event() {
+        id = (int) (Math.random()*10000);
+    }
+
+    public Event(Date date, DateFormat df) {
+        this();
         this.date = date;
         this.df = df;
-        id = (int) (Math.random()*10000);
+
     }
 
     public void setMsg(String msg) {
@@ -35,20 +41,14 @@ public class Event {
         return msg;
     }
 
-    public static boolean isDay() {
-        if(date.getHour() > 8 && date.getHour() < 17 ) {
-            System.out.println(date.getHour());
-            return true;
-        }
-        return false;
-    }
+
 
     @Override
     public String toString() {
         return "Event{" +
                 "id=" + id +
                 ", msg='" + msg + '\'' +
-                ", date=" + df.format(date) +
+
                 '}';
     }
 }
